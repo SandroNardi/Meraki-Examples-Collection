@@ -17,9 +17,11 @@ orgAlertDaysDeltaTimes = 5
 
 # output tables headers
 t_resolved = PrettyTable(
-    ["D-Type", "Alert type", "Name", "Serial", "Started", "Stopped"]
+    ["D-Type", "Alert type", "Name", "Serial", "Started", "Stopped", "Duration"]
 )
-t_active = PrettyTable(["D-Type", "Alert type", "Name", "Serial", "Started"])
+t_active = PrettyTable(
+    ["D-Type", "Alert type", "Name", "Serial", "Started", "In State"]
+)
 
 
 dashboard = meraki.DashboardAPI(API_KEY, suppress_logging=True)
@@ -65,6 +67,8 @@ for org in organizations:
                         device["name"],
                         device["serial"],
                         alert["startedAt"],
+                        datetime.now()
+                        - datetime.strptime(alert["startedAt"], "%Y-%m-%dT%H:%M:%SZ"),
                     ]
                 )
             else:
@@ -76,6 +80,8 @@ for org in organizations:
                         device["serial"],
                         alert["startedAt"],
                         alert["resolvedAt"],
+                        datetime.strptime(alert["resolvedAt"], "%Y-%m-%dT%H:%M:%SZ")
+                        - datetime.strptime(alert["startedAt"], "%Y-%m-%dT%H:%M:%SZ"),
                     ]
                 )
 

@@ -25,6 +25,10 @@ for org in organizations:
     switches = dashboard.organizations.getOrganizationDevices(
         org["id"], total_pages="all", productTypes=["switch"]
     )
+    checkedPorts = 0
+    portsInScope = 0
+    healtyPortsInScope = 0
+
     for switch in switches:
 
         switchportConfig = dashboard.switch.getDeviceSwitchPorts(switch["serial"])
@@ -33,10 +37,11 @@ for org in organizations:
         )
 
         for swPortConf in switchportConfig:
-
+            checkedPorts += 1
             if switchportTag not in swPortConf["tags"]:
                 continue
 
+            portsInScope += 1
             for swPortStat in switchportStatus:
 
                 if swPortStat["portId"] != swPortConf["portId"]:
@@ -75,3 +80,10 @@ for org in organizations:
                     and swPortStat["speed"] == "100 Mbps"
                 ):
                     print(f"= {switchStr} - Unexpected 100 mbps")
+                    continue
+
+                healtyPortsInScope += 1
+    if checkedPorts != 0:
+        print(
+            f"Checked {checkedPorts} ports. \n'{switchportTag}' ports {portsInScope}.\n{portsInScope-healtyPortsInScope}/{portsInScope} with issues"
+        )

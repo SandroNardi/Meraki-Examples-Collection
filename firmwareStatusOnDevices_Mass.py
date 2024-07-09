@@ -135,8 +135,6 @@ for org in organizations:
             )
             off_ok_qty += 1
 
-    print(t_devices)
-
     # online devices
     status_list = [d for d in devices_status if d["status"] == "online"]
 
@@ -183,3 +181,5 @@ for org in organizations:
     )
 
     print(t_summary)
+
+    print(t_devices)
