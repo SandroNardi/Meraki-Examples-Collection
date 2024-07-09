@@ -5,13 +5,16 @@ A collection of python scripts for the [Cisco Meraki](https://developer.cisco.co
 ## Disclaimer
 
 The content of this repo is for inspirational and educational purposes only, not for production use.
+
 Scripts are not optimized.
+
 Some input will lead to unhandled exceptions.
 
 ## Description
 
 A collection of python scripts for the [Cisco Meraki](https://developer.cisco.com/meraki/meraki-platform/) dashboard.
-The leading \_Mass mark a script that will run on each organization accessible bu the API key provided.
+
+The trailing \_Mass mark a script that will run on each organization accessible bu the API key provided.
 
 ## API KEY
 
