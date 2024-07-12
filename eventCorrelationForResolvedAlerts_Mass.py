@@ -9,7 +9,7 @@ import terminalColors as c
 # empty cell in table
 FS = "---"
 # max lenght of table "info" column
-MAX_LEN = 80
+MAX_LEN = 65
 
 # API KEY read only
 API_KEY = os.getenv("MK_TEST_API")
@@ -17,7 +17,7 @@ API_KEY = os.getenv("MK_TEST_API")
 
 # Org alert pram
 # from https://developer.cisco.com/meraki/api-v1/get-organization-assurance-alerts/ deviceTypes supported : MX - MS - MR - Z - VMX - Catalyst Switch - Catalyst AP
-alerts_type_of_devices = ["MS"]
+alerts_type_of_devices = ["MS", "MX"]
 # from https://developer.cisco.com/meraki/api-v1/get-organization-assurance-alerts/ types - match "Category" column in the table, empty list for all type of alerts
 alerts_type_of_alerts = []
 # alerst starded and resolved delta days
@@ -28,13 +28,13 @@ orgAlertDaysDeltaTimes = 6
 log_excluded_event_types = []
 
 # events to collect and display
-inTable = {"change": True, "event": True, "orgAlert": True, "status": True}
+inTable = {"changeLog": True, "eventLog": True, "orgAlert": True, "deviceStatus": True}
 
 # events to collect delta times minutes
 delta_times_minutes = {
-    "changelogStart": -10,
+    "changelogStart": 10,
     "changelogStop": 10,
-    "deviceLogStart": -5,
+    "deviceLogStart": 5,
     "deviceLogStop": 5,
     "deviceStatusNext": 5,
 }
@@ -74,6 +74,25 @@ t_history = PrettyTable(
 
 dashboard = meraki.DashboardAPI(API_KEY, suppress_logging=True)
 organizations = dashboard.organizations.getOrganizations()
+
+
+print(
+    f"Events triggered and resolved in the last {orgAlertDaysDeltaTimes} days on this device types {alerts_type_of_devices}. # of excluded alert types: {len(alerts_type_of_alerts)}"
+)
+
+print(f"Looking for: {inTable}")
+print(
+    f"Admin ChangeLog range from {delta_times_minutes['changelogStart']} min before event start to {delta_times_minutes['changelogStart']} min after event resolved"
+)
+print(
+    f"Device EventLog range from {delta_times_minutes['deviceLogStart']} min before event start to {delta_times_minutes['deviceLogStop']} min after event resolved. # of exclude events categories: {len(log_excluded_event_types)}"
+)
+print(
+    f"Device status change monitored from event start to {delta_times_minutes['deviceStatusNext']} min after event resolved"
+)
+
+input("Press ENTER to continue...")
+
 
 # time window calculations
 alert_tsStart = (
@@ -147,7 +166,7 @@ for org in organizations:
                 )
 
             # get device statatus change in time frame
-            if inTable["status"]:
+            if inTable["deviceStatus"]:
                 logAfterString = (
                     dt_eventResolved
                     + timedelta(minutes=delta_times_minutes["deviceLogStop"])
@@ -187,11 +206,11 @@ for org in organizations:
                             ]
                         )
 
-            # get admin change in network in last 3 h before start
-            if inTable["change"]:
+            # get admin change in network in last x h before start
+            if inTable["changeLog"]:
                 changeT0 = (
                     dt_eventStart
-                    + timedelta(minutes=delta_times_minutes["changelogStart"])
+                    - timedelta(minutes=delta_times_minutes["changelogStart"])
                 ).strftime("%Y-%m-%dT%H:%M:%SZ")
 
                 changeT1 = (
@@ -219,11 +238,11 @@ for org in organizations:
                         ]
                     )
             # get device logs in the time frame
-            if inTable["event"]:
+            if inTable["eventLog"]:
 
                 logDeltaBeforeStr = (
                     dt_eventStart
-                    + timedelta(minutes=delta_times_minutes["deviceLogStart"])
+                    - timedelta(minutes=delta_times_minutes["deviceLogStart"])
                 ).strftime("%Y-%m-%dT%H:%M:%SZ")
 
                 logDeltaAfterStr = (
