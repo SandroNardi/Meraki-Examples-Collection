@@ -9,7 +9,7 @@ import terminalColors as c
 # empty cell in table
 FS = "---"
 # max lenght of table "info" column
-MAX_LEN = 65
+MAX_LEN = 40
 
 # API KEY read only
 API_KEY = os.getenv("MK_TEST_API")
@@ -17,11 +17,11 @@ API_KEY = os.getenv("MK_TEST_API")
 
 # Org alert pram
 # from https://developer.cisco.com/meraki/api-v1/get-organization-assurance-alerts/ deviceTypes supported : MX - MS - MR - Z - VMX - Catalyst Switch - Catalyst AP
-alerts_type_of_devices = ["MS", "MX"]
+alerts_type_of_devices = ["MS"]
 # from https://developer.cisco.com/meraki/api-v1/get-organization-assurance-alerts/ types - match "Category" column in the table, empty list for all type of alerts
 alerts_type_of_alerts = []
 # alerst starded and resolved delta days
-orgAlertDaysDeltaTimes = 6
+orgAlertDaysDeltaTimes = 2
 
 # event log param
 # event log to exclude, match "Category" column

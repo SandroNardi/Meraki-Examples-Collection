@@ -13,7 +13,7 @@ alerts_type_of_devices = ["MR", "MX", "MV"]
 # from https://developer.cisco.com/meraki/api-v1/get-organization-assurance-alerts/ types - match "Category" column in the table, empty list for all type of alerts
 alerts_type_of_alerts = ["unreachable", "bad_connectivity"]
 # alerst starded and resolved delta days
-orgAlertDaysDeltaTimes = 5
+orgAlertDaysDeltaTimes = 30
 
 # output tables headers
 t_resolved = PrettyTable(
@@ -54,7 +54,7 @@ for org in organizations:
     for alert in alerts:
         if alert["deviceType"] not in alerts_type_of_devices:
             continue
-        if alert["type"] not in alerts_type_of_alerts:
+        if alert["type"] not in alerts_type_of_alerts and alerts_type_of_alerts:
             continue
 
         for device in alert["scope"]["devices"]:
