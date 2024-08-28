@@ -9,7 +9,7 @@ API_KEY = os.getenv("MK_TEST_API")
 
 # Org alert pram
 # from https://developer.cisco.com/meraki/api-v1/get-organization-assurance-alerts/ deviceTypes supported : MX - MS - MR - Z - VMX - Catalyst Switch - Catalyst AP
-alerts_type_of_devices = ["MR", "MX", "MV"]
+alerts_type_of_devices = ["MR", "MX", "MS"]
 # from https://developer.cisco.com/meraki/api-v1/get-organization-assurance-alerts/ types - match "Category" column in the table, empty list for all type of alerts
 alerts_type_of_alerts = ["unreachable", "bad_connectivity"]
 # alerst starded and resolved delta days
