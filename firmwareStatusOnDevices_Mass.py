@@ -89,7 +89,7 @@ for org in organizations:
                 off_mismatch_qty += 1
                 continue
 
-        if device["firmware"] == "Firmware locked. Please contact support":
+        if device["firmware"] == "Firmware locked. Please contact support.":
             if status_list[0]["status"] == "online":
                 t_devices.add_row(
                     [
